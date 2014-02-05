@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.framgia.eyemovic.adapter.ListRewardAppAdapter;
 import com.framgia.eyemovic.bean.RewardAppItem;
 import com.framgia.eyemovic.common.AppConst;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -16,8 +17,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class TopActivity extends Activity{
-	
+public class TopActivity extends Activity {
+
 	private RelativeLayout mLayoutReward;
 	private ListView mListRewardApp;
 	private ImageButton mBtnCloseReward;
@@ -31,34 +32,39 @@ public class TopActivity extends Activity{
 		mListRewardData = new ArrayList<RewardAppItem>();
 		initView();
 	}
-	
-	private void initView(){
-		mLayoutReward = (RelativeLayout)findViewById(R.id.layout_reward);
-		mListRewardApp = (ListView)findViewById(R.id.list_reward_app);
-		mBtnCloseReward = (ImageButton)findViewById(R.id.btn_reward_close);
+
+	private void initView() {
+		mLayoutReward = (RelativeLayout) findViewById(R.id.layout_reward);
+		mListRewardApp = (ListView) findViewById(R.id.list_reward_app);
+		mBtnCloseReward = (ImageButton) findViewById(R.id.btn_reward_close);
 		mBtnCloseReward.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				mLayoutReward.setVisibility(View.GONE);
 			}
 		});
-		
+
 		initDataForListView();
 	}
-	
-	private void initDataForListView(){
+
+	private void initDataForListView() {
 		RewardAppItem item = null;
-		item = new RewardAppItem(R.drawable.re_play, R.drawable.re_play_txt, AppConst.MUSICJP_PLAYURL,AppConst.MUSICJP_PACKAGE);
+		item = new RewardAppItem(R.drawable.re_play, R.drawable.re_play_txt,
+				AppConst.MUSICJP_PLAYURL, AppConst.MUSICJP_PACKAGE);
 		mListRewardData.add(item);
-		
-		item = new RewardAppItem(R.drawable.re_chaku, R.drawable.re_melo_txt,AppConst.MUSICJP_MELO_LITE_PLAYURL,AppConst.MUSICJP_MELO_LITE_PACKAGE);
+
+		item = new RewardAppItem(R.drawable.re_chaku, R.drawable.re_melo_txt,
+				AppConst.MUSICJP_MELO_LITE_PLAYURL,
+				AppConst.MUSICJP_MELO_LITE_PACKAGE);
 		mListRewardData.add(item);
-		
-		item = new RewardAppItem(R.drawable.re_lr, R.drawable.re_lr_txt, AppConst.NET_RADIO_PLAYURL, AppConst.NET_RADIO_PACKAGE);
+
+		item = new RewardAppItem(R.drawable.re_lr, R.drawable.re_lr_txt,
+				AppConst.NET_RADIO_PLAYURL, AppConst.NET_RADIO_PACKAGE);
 		mListRewardData.add(item);
-		
-		mListAdapter = new ListRewardAppAdapter(TopActivity.this, R.layout.list_reward_item, mListRewardData);
+
+		mListAdapter = new ListRewardAppAdapter(TopActivity.this,
+				R.layout.list_reward_item, mListRewardData);
 		mListRewardApp.setAdapter(mListAdapter);
 	}
 
@@ -67,35 +73,49 @@ public class TopActivity extends Activity{
 		super.onResume();
 		checkInstalledPackage();
 	}
-	
-	private void checkInstalledPackage(){
+
+	private void checkInstalledPackage() {
 		int size = mListRewardData.size();
-		if(size <= 0){
+		if (size <= 0) {
 			return;
 		}
-		
-		for(int i=size-1;i>=0;i--){
+
+		for (int i = size - 1; i >= 0; i--) {
 			RewardAppItem item = mListRewardData.get(i);
-			if(isAppInstalled(item.getAppPackageName())){
+			if (isAppInstalled(item.getAppPackageName())) {
 				mListRewardData.remove(i);
 			}
 		}
-		
-		if(mListRewardData.size() == size){
+
+		if (mListRewardData.size() == size) {
 			mListAdapter.refreshList(mListRewardData);
 		}
 	}
-	
-	private boolean isAppInstalled(String packageName){
+
+	private boolean isAppInstalled(String packageName) {
 		PackageManager pm = getPackageManager();
-		try{
+		try {
 			pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-		}catch(Exception e){
+		} catch (Exception e) {
 			Log.e("GetPackageInfo", "" + e.getMessage());
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		EasyTracker.getInstance(this).activityStart(this);
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		EasyTracker.getInstance(this).activityStop(this);
+	}
+
 }
