@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp" 
+    android:background="@drawable/base_line">
+    <ImageView 
+        android:id="@+id/img_reward_app_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        android:background="@drawable/re_chaku"/>
+    
+    <ImageView
+        android:id="@+id/img_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/img_reward_app_logo"
+        android:layout_toLeftOf="@+id/btn_download_reward"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"/>
+    
+
+    <ImageButton 
+        android:id="@+id/btn_download_reward"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/dl_btn"
+        android:contentDescription="@string/app_name"/>
+</RelativeLayout>
